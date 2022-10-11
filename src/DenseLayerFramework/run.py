@@ -73,14 +73,36 @@ def run_script():
         decay=0
         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=decay)
         #scheduler = ReduceLROnPlateau(optimizer, 'max', patience=config.general['patience'])
+        
         iter_i = 0
         with trange(n_epochs) as pbar:
             for epoch in pbar:
                 #if done:
                 #  break
                 pbar.set_description(f"Boot {boot_i} - Epoch {epoch}")
-                for x, y in train_dataloader:
-                    
+
+def train_step(x, y, M):
+    M.optimizer.zero_grad()
+    z = M.model(x)
+    loss = M.criterion(z, y)
+    loss.backward()
+    M.optimizer.step()
+    return loss
+
+def validate(x, y, M):
+    M.model.eval()
+    z_pred = M.model(x)
+    loss = M.criterion(z_pred, y)
+    eval_metrics = dict()
+    for name, fun in M.metrics.items():
+        eval_metrics[name] = fun(y, z_pred)
+    M.model.train()
+    return loss, eval_metrics
+    
+                for x, y in train_dataloader:  
+                    train_loss = train_step(x, y, M)
+                    iter = iter + 1
+                    if i
                     # Reset gradient
                     optimizer.zero_grad()
                     # Backprop
