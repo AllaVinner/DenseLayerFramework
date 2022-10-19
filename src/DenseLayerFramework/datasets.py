@@ -4,6 +4,7 @@ from numpy import random
 import numpy as np
 from numpy import random
 
+# Data set classes
 def radialgamma_augmentation(x, s = 0.1, m = 1):
   k = np.power(m/s, 2)
   theta = np.power(s, 2)/m
