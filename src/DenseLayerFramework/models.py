@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 import sklearn
+import matplotlib.pyplot as plt
 
 class LinearNet(nn.Module):
     
